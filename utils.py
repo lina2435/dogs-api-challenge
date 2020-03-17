@@ -33,41 +33,48 @@ def request(
 
     :return: Dictionary with the response data
     """
+    res = None
+
     # parse url
     parsed_url = urlparse(url)
     base_url = parsed_url.netloc
-    url = '{}'.format(parsed_url.path)
+    path = '{}'.format(parsed_url.path)
 
     if parsed_url.query:
-        url = '{}?{}'.format(url, parsed_url.query)
+        path = '{}?{}'.format(path, parsed_url.query)
+
+    # connection
+    conn = http.client.HTTPSConnection(base_url)
+    headers = {
+        'content-type': 'application/json',
+    }
+
+    # add token if exists
+    if token:
+        headers['Authorization'] = 'JWT {}'.format(token)
+
+    # required request data
+    kwargs = {}  # type: Dict[str, Any]
+
+    # put body
+    if data:
+        kwargs['body'] = json.dumps(data)
 
     # make request
     try:
-        # connection
-        conn = http.client.HTTPSConnection(base_url)
-        headers = {
-            'content-type': 'application/json',
-        }
-
-        # add token if exists
-        if token:
-            headers['Authorization'] = 'JWT {}'.format(token)
-
-        # required request data
-        kwargs = {}  # type: Dict[str, Any]
-
-        # put body
-        if data:
-            kwargs['body'] = json.dumps(data)
-
         # request
-        conn.request(method, url, headers=headers, **kwargs)
+        conn.request(method, path, headers=headers, **kwargs)
 
         # manage response
         res = conn.getresponse()
+
         response_data = json.loads(res.read().decode())
     except Exception:
-        error_message = error_message if error_message else 'Url must be wrong'
+        if error_message is None:
+            error_message = f'Url may be wrong. url: {url}'
+            if res:
+                error_message += f' HTTP status: {res.code}'
+
         raise ValueError(error_message)
 
     return response_data
