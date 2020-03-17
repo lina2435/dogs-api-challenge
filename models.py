@@ -40,7 +40,7 @@ class Breed(object):
     USAGE:
         >>> breed = Breed(id=1, name='Kiltro')
         >>> dog = Dog(id=1, name='Cachupin', breed=breed.id)
-        >>> breed.add_dog(dogs)
+        >>> breed.add_dog(dog)
         >>> breed.dogs_count()
         1
     """
@@ -69,9 +69,19 @@ class DogHouse(object):
 
     USAGE:
         >>> dog_house = DogHouse()
-        >>> dog_house.get_data(token=token)
-        >>> data = { ## some data ## }
-        >>> dog_house.send_data(data=data)
+        >>> dog_house.get_data(token='some_token')
+        >>> total_dogs = dog_house.get_total_dogs()
+        >>> common_breed = dog_house.get_common_breed()
+        >>> common_dog_name = dog_house.get_common_dog_name()
+        >>> total_breeds = dog_house.get_total_breeds()
+        >>> data = {  # add some data
+        ...     'total_dogs': total_dogs,
+        ...     'total_breeds': total_breeds,
+        ...     'common_breed': common_breed.name,
+        ...     'common_dog_name': common_dog_name,
+        ... }
+        >>> token = 'some token'
+        >>> dog_house.send_data(data=data, token=token)
     """
     def __init__(self):
         self.breeds: List[Breed] = []
