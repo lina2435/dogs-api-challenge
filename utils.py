@@ -102,13 +102,13 @@ def get(url: str, token: str) -> Dict[Any, Any]:
     return request('GET', url, token=token)
 
 
-def auth(email: str, password: str) -> Dict[Any, Any]:
+def auth(email: str, password: str) -> str:
     """
     Constructs and send an Auth request
     :param email: user account email
     :param password: user account password
 
-    :return: Dictionary with the response data, include a token
+    :return: str with the authentication toke..
     """
     # set credentials
     data = {
@@ -117,9 +117,16 @@ def auth(email: str, password: str) -> Dict[Any, Any]:
     }
     error_message = 'Invalid credentials'
 
-    return request(
+    response_data = request(
         'POST',
         BASE_URL + '/api/v1/auth/',
         data=data,
         error_message=error_message,
     )
+
+    if 'token' not in response_data:
+        if 'nonFieldErrors' in response_data:
+            raise ValueError(response_data['nonFieldErrors'])
+        raise ValueError(error_message)
+
+    return response_data['token']

@@ -25,7 +25,7 @@ def main():
     }
 
     # get token
-    token = auth(**credentials).get('token')
+    token = auth(**credentials)
 
     # create dog house and pull data from api
     dog_house = DogHouse()
