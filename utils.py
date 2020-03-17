@@ -11,18 +11,17 @@ from urllib.parse import urlparse
 # typing
 from typing import Any
 from typing import Dict
-from typing import List
 
 # Must change in test repository
-BASE_URL = 'http://localhost:8000'
+BASE_URL = 'https://dogs.magnet.cl'
 
 
 def request(
     method: str,
     url: str,
-    data: Dict[str, str]=None,
-    token: str=None,
-    error_message: str=None
+    data: Dict[str, str] = None,
+    token: str = None,
+    error_message: str = None
 ) -> Dict[Any, Any]:
     """
     Constructs and send a request
@@ -45,7 +44,7 @@ def request(
     # make request
     try:
         # connection
-        conn = http.client.HTTPConnection(base_url)
+        conn = http.client.HTTPSConnection(base_url)
         headers = {
             'content-type': 'application/json',
         }
