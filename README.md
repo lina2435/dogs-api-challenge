@@ -43,7 +43,7 @@ comment at the beginning of the file. For instance: `main.py` and `utils.py`.
 
 ### API
 
-All the necessary documentation to perform this test is in: http://dogs.magnet.cl/
+All the necessary documentation to perform this test is in: https://dogs.magnet.cl/
 
 Also, our API implements the Rate Limiting policy, this means that it limits the number of requests that can be made in a period of time and in case of exceeding this limit, pending requests are rejected.
 
@@ -53,7 +53,7 @@ Our API accepts up to `200 requests per minute`, this implies that any solution 
 
 You will have full write access to your own fork of this project at
 http://interviews.magnet.cl/{your-user-name}/python-test
-Send us an email to mauricio@magnet.cl when you push your
+Send us an email to interviews@magnet.cl when you push your
 last commit and your answer is ready for review.
 
 Pull/Merge requests are not allowed on this project to prevent your answers
