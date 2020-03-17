@@ -49,7 +49,7 @@ def main():
         'common_breed': common_breed.name,
         'common_dog_name': common_dog_name,
     }
-    dog_house.send_data(data=data)
+    dog_house.send_data(data=data, token=token)
 
 
 if __name__ == '__main__':
