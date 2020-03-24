@@ -47,7 +47,11 @@ All the necessary documentation to perform this test is in: https://dogs.magnet.
 
 Also, our API implements the Rate Limiting policy, this means that it limits the number of requests that can be made in a period of time and in case of exceeding this limit, pending requests are rejected.
 
-Our API accepts up to `200 requests per minute`, this implies that any solution that exceeds this number will be rejected immediately.
+Our API accepts up to `200 requests per minute`, this implies that any
+solution that exceeds this number will be rejected immediately. If your code
+is done correctly you shouldn't need to worry about this limit.
+
+Note: The data in the API does not change.
 
 #### Delivery method
 
