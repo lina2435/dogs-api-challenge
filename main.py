@@ -18,7 +18,7 @@ def main():
     without throwing any exceptions. To do this, you must complement
     the DogHouse class found in the models.py file
     """
-    # get gredentials
+    # get credentials
     email = input('What\'s is your email? ')
     password = getpass('What\'s is your password? ')
     credentials = {
