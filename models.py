@@ -8,8 +8,7 @@ from typing import List
 
 class Dog(object):
     """
-    Dog object that is composed of the id of the dog,
-    name of the dog and breed of the dog
+    Dog object that is composed of the id, name and breed of the dog
 
     To initialize:
     :param id: dog id
@@ -27,8 +26,7 @@ class Dog(object):
 
 class Breed(object):
     """
-    Breed object that is composed of the id of the breed,
-    and the name of the breed.
+    Breed object that is composed of the id and the name of the breed.
 
     To initialize:
     :param id: breed id
