@@ -1,9 +1,12 @@
 # utils
 from utils import get
 from utils import post
+from utils import auth
 
 # typing
 from typing import List
+
+from itertools import groupby
 
 
 class Dog(object):
@@ -18,6 +21,7 @@ class Dog(object):
     USAGE:
         >>> dog = Dog(id=1, name='Bobby', breed=1)
     """
+
     def __init__(self, id: int, name: str, breed: int):
         self.id = id
         self.name = name
@@ -42,6 +46,7 @@ class Breed(object):
         >>> breed.dogs_count()
         1
     """
+
     def __init__(self, id: int, name: str):
         self.id = id
         self.name = name
@@ -81,6 +86,7 @@ class DogHouse(object):
         >>> token = 'some token'
         >>> dog_house.send_data(data=data, token=token)
     """
+
     def __init__(self):
         self.breeds: List[Breed] = []
         self.dogs: List[Dog] = []
@@ -93,31 +99,68 @@ class DogHouse(object):
         the information, also consider the dogs and breeds fields
         of the DogHouse class to perform data manipulation.
         """
-        raise NotImplementedError
+        # Dogs
+        flag_dogs_end = False
+        dogs_next_page = 'http://dogs.magnet.cl/api/v1/dogs/'
+        while not flag_dogs_end:
+            dogs_response = get(dogs_next_page, token)
+            dogs_next_page = dogs_response['next']
+            flag_dogs_end = dogs_next_page == None
+            for hash in dogs_response['results']:
+                dog = Dog(hash['id'], hash['name'], hash['breed'])
+                self.dogs.append(dog)
+        # Breeds
+        flag_breeds_end = False
+        breeds_next_page = 'http://dogs.magnet.cl/api/v1/breeds/'
+        while not flag_breeds_end:
+            breeds_response = get(breeds_next_page, token)
+            breeds_next_page = breeds_response['next']
+            flag_breeds_end = breeds_next_page == None
+            for hash in breeds_response['results']:
+                breed = Breed(hash['id'], hash['name'])
+                self.breeds.append(breed)
 
     def get_total_breeds(self) -> int:
         """
         Returns the amount of different breeds in the doghouse
         """
-        raise NotImplementedError
+        return self.breeds.__len__()
 
     def get_total_dogs(self) -> int:
         """
         Returns the amount of dogs in the doghouse
         """
-        raise NotImplementedError
+        return self.dogs.__len__()
 
     def get_common_breed(self) -> Breed:
         """
         Returns the most common breed in the doghouse
         """
-        raise NotImplementedError
+        most_common_breed_id = None
+        most_common_breed_quantity = 0
+        sorted_breeds = sorted(self.dogs, key=lambda dog: dog.breed)
+        for key, value in groupby(sorted_breeds, lambda item: item.breed):
+            quantity = list(value).__len__()
+            if quantity > most_common_breed_quantity:
+                most_common_breed_id = key
+                most_common_breed_quantity = quantity
+        for breed in self.breeds:
+            if(breed.id == most_common_breed_id):
+                return breed
 
     def get_common_dog_name(self) -> str:
         """
         Returns the most common dog name in the doghouse
         """
-        raise NotImplementedError
+        most_common_dog_name = None
+        most_common_dog_name_quantity = 0
+        sorted_dogs = sorted(self.dogs, key=lambda dog: dog.name)
+        for key, value in groupby(sorted_dogs, lambda item: item.name):
+            quantity = list(value).__len__()
+            if quantity > most_common_dog_name_quantity:
+                most_common_dog_name = key
+                most_common_dog_name_quantity = quantity
+        return most_common_dog_name
 
     def send_data(self, data: dict, token: str):
         """
@@ -126,4 +169,9 @@ class DogHouse(object):
 
         Important!! We don't tell you if the answer is correct
         """
-        raise NotImplementedError
+        post('http://dogs.magnet.cl/api/v1/answer/', {
+            'totalBreeds': data['total_breeds'],
+            'totalDogs': data['total_dogs'],
+            'commonBreed': data['common_breed'],
+            'commonDogName': data['common_dog_name']
+        }, token)
